@@ -16,7 +16,7 @@ To request data from the microservice, follow these steps:
    python server.py
    ```
 3. **Send Request:** In a separate terminal window, run the client script to send requests and receive responses. Example commands include:
-   - **Generate High-Contrast Color Pairs:**
+   - **Generate High-Contrast Color Pairs:** 
      ```bash
      python client.py generate_pairs
      ```
