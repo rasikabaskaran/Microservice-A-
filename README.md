@@ -9,7 +9,7 @@ This microservice provides functionality for generating high-contrast color pair
 - **styles.css**: Stylesheet for the frontend, controlling the presentation of the HTML page.
 - **app.js**: Handles the business logic for making requests to the server and updating the web page dynamically based on the responses.
 
-## How to Programmatically REQUEST Data
+## How to REQUEST Data
 To interact with the microservice programmatically, you can use the frontend provided by `index.html` or directly through HTTP requests as outlined below:
 
 ### Start the Microservice Server
@@ -41,7 +41,7 @@ print(response.json())
 
 This will output the high-contrast color pairs based on the selected mode.
 
-## How to Programmatically RECEIVE Data
+## How to RECEIVE Data
 The server handles incoming requests as follows:
 
 ### Server Response Handling
