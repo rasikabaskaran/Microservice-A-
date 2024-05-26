@@ -1,0 +1,20 @@
+.color-display {
+  padding: 20px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  font-size: 24px;
+  text-align: center;
+  width: 80%;
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+}
