@@ -4,43 +4,74 @@
 This microservice provides functionality for generating high-contrast color pairs and dynamically adjusting them based on ambient light conditions. 
 
 ## Files
-- **server.py**: This file contains the Flask-based server program that implements the microservice. It listens for incoming HTTP requests and responds with high-contrast color pairs.
-- **index.html**: The HTML file that serves as the frontend interface for interacting with the microservice. It includes buttons to trigger color changes.
-- **styles.css**: The stylesheet for the frontend, defining the aesthetics and layout of the HTML page.
-- **app.js**: The JavaScript file that handles the logic for making requests to the server and updating the webpage based on the received responses.
+- **server.py**: Implements the microservice on a Flask server, responding to HTTP requests with high-contrast color pairs.
+- **index.html**: Frontend interface for user interaction with the microservice.
+- **styles.css**: Stylesheet for the frontend, controlling the presentation of the HTML page.
+- **app.js**: Handles the business logic for making requests to the server and updating the web page dynamically based on the responses.
 
 ## How to Programmatically REQUEST Data
-To request data from the microservice, simply interact with the web interface provided by the HTML file. Follow these steps:
+To interact with the microservice programmatically, you can use the frontend provided by `index.html` or directly through HTTP requests as outlined below:
 
-### 1. Start the Microservice Server
-Navigate to the directory containing the microservice files and run the server script by executing:
+### Start the Microservice Server
+1. **Navigate** to the directory containing the microservice files.
+2. **Run the server script**:
+   ```bash
+   python server.py
+   ```
+
+### Using the Web Interface
+1. **Open your web browser** and go to `http://127.0.0.1:5000/` to access the interface.
+2. **Interact with the buttons** ("Light Mode" and "Dark Mode") to send requests to the server.
+
+### Programmatically Sending Requests
+To send a request from another application or script, you can use tools like `curl` or write a small script using libraries like `requests` in Python:
+
 ```bash
-python server.py
+curl "http://localhost:5000/get_contrast_colors?mode=dark"
 ```
-This will start the Flask server, making the microservice available at `http://localhost:5000/`.
 
-### 2. Open the Web Interface
-Open a web browser and go to `http://127.0.0.1:5000/`. This will load the HTML page that interfaces with the microservice.
+Or using Python:
 
-### 3. Use the Interface
-Click the "Light Mode" and "Dark Mode" buttons on the webpage to send requests to the microservice. The page will display high-contrast color pairs based on your selection.
+```python
+import requests
+
+response = requests.get("http://localhost:5000/get_contrast_colors?mode=dark")
+print(response.json())
+```
+
+This will output the high-contrast color pairs based on the selected mode.
 
 ## How to Programmatically RECEIVE Data
-The server processes requests as follows:
+The server handles incoming requests as follows:
 
-### Process Requests
-When a user clicks a button on the web interface (`index.html`), a request is sent to `/get_contrast_colors` with a specified mode (`light` or `dark`). The server processes this request and returns the appropriate color scheme.
+### Server Response Handling
+- The server listens for requests at `/get_contrast_colors`, processing them based on the `mode` parameter (`light` or `dark`).
+- It then returns a JSON object with the corresponding high-contrast color values.
 
-## Example Interaction
-Here's a simplified overview of how the interaction occurs:
+### Example of Handling a Request
+When a request is received, the server executes the following steps:
 
-1. **User clicks "Dark Mode"** on the webpage.
-2. **JavaScript makes an HTTP GET request** to the server with the query parameter `?mode=dark`.
-3. **Server processes the request**, determining the appropriate high-contrast colors.
-4. **Server sends a JSON response** with the colors `{ text_color: "#FFFFFF", background_color: "#000000" }`.
-5. **JavaScript updates the webpage's styles** to reflect the new color scheme.
+1. **Parse the Request**: Extract the `mode` parameter from the incoming request.
+2. **Determine the Color Scheme**: Based on the `mode`, select the appropriate high-contrast color pair.
+3. **Send the Response**: Return the color pair as a JSON response.
 
-## Next Steps
-- For further customization, users can modify `styles.css` to alter the appearance or add more functionality in `app.js` to handle additional interaction patterns.
-- Consider adding more features like user-defined color schemes or integration with real-time lighting data for ambient adjustments.
+#### Sample Response to a 'dark' mode request:
 
+```json
+{
+  "text_color": "#FFFFFF",
+  "background_color": "#000000"
+}
+```
+
+## Example Call and Response
+Using JavaScript to fetch data:
+
+```javascript
+fetch("http://localhost:5000/get_contrast_colors?mode=dark")
+  .then(response => response.json())
+  .then(data => console.log("Received high-contrast colors:", data))
+  .catch(error => console.error("Error fetching data:", error));
+```
+
+This call will log the high-contrast color pair to the console, showing how the microservice processes and responds to requests.
