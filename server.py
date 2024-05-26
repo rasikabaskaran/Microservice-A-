@@ -1,28 +1,27 @@
-import zmq
+from flask import Flask, jsonify, request, render_template
+from flask_cors import CORS  # Import CORS
 
-def generate_contrast_pairs():
-    return [("black", "white"), ("white", "black")]
+app = Flask(__name__)
+CORS(app)
 
-def adjust_color_pair_for_light(light_level):
-    return ("white", "black") if light_level < 50 else ("black", "white")
+@app.route('/')
+def home():
+    return render_template('index.html')
 
-def main():
-    context = zmq.Context()
-    socket = context.socket(zmq.REP)
-    socket.bind("tcp://*:5679")
-    print("Service is running...")
+@app.route('/get_contrast_colors')
+def get_contrast_colors():
+    mode = request.args.get('mode', 'dark')  # Default mode is 'dark'
+    if mode == 'light':
+        colors = {
+            'text_color': '#000000',  # Black text
+            'background_color': '#FFFFFF'  # White background
+        }
+    else:
+        colors = {
+            'text_color': '#FFFFFF',  # White text
+            'background_color': '#000000'  # Black background
+        }
+    return jsonify(colors)
 
-    while True:
-        message = socket.recv_pyobj()
-        if message.get("request") == "generate_pairs":
-            pairs = generate_contrast_pairs()
-            socket.send_pyobj(pairs)
-        elif message.get("request") == "adjust_for_light":
-            light_level = message.get("light_level", 50)
-            adjusted_pair = adjust_color_pair_for_light(light_level)
-            socket.send_pyobj(adjusted_pair)
-
-if __name__ == "__main__":
-    main()
-
-
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)
