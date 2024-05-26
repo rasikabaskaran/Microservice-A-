@@ -4,48 +4,43 @@
 This microservice provides functionality for generating high-contrast color pairs and dynamically adjusting them based on ambient light conditions. 
 
 ## Files
-- **server.py:** This file contains the server program that implements the microservice. It listens for incoming requests, processes them based on the type (static or ambient light-adjusted), and sends back the appropriate high-contrast color pairs.
-- **client.py:** This file contains the client program that demonstrates how to make requests to the microservice and receive responses. It's useful for testing and can be used as an example for integrating the microservice into other projects.
-
+- **server.py**: This file contains the Flask-based server program that implements the microservice. It listens for incoming HTTP requests and responds with high-contrast color pairs.
+- **index.html**: The HTML file that serves as the frontend interface for interacting with the microservice. It includes buttons to trigger color changes.
+- **styles.css**: The stylesheet for the frontend, defining the aesthetics and layout of the HTML page.
+- **app.js**: The JavaScript file that handles the logic for making requests to the server and updating the webpage based on the received responses.
 
 ## How to Programmatically REQUEST Data
-To request data from the microservice, follow these steps:
+To request data from the microservice, simply interact with the web interface provided by the HTML file. Follow these steps:
 
-1. **Connect to the Microservice:** Open a terminal window and navigate to the directory containing the microservice files.
-2. **Start the Microservice Server:** Run the server script by executing the following command:
-   ```bash
-   python server.py
-   ```
-3. **Send Request:** In a separate terminal window, run the client script to send requests and receive responses. Example commands include:
-   - **Generate High-Contrast Color Pairs:**
-     ```bash
-     python client.py generate_pairs
-     ```
-   - **Adjust Color Based on Ambient Light:**
-     ```bash
-     python client.py adjust_for_light 50
-     ```
+### 1. Start the Microservice Server
+Navigate to the directory containing the microservice files and run the server script by executing:
+```bash
+python server.py
+```
+This will start the Flask server, making the microservice available at `http://localhost:5000/`.
+
+### 2. Open the Web Interface
+Open a web browser and go to `http://127.0.0.1:5000/`. This will load the HTML page that interfaces with the microservice.
+
+### 3. Use the Interface
+Click the "Light Mode" and "Dark Mode" buttons on the webpage to send requests to the microservice. The page will display high-contrast color pairs based on your selection.
 
 ## How to Programmatically RECEIVE Data
-To receive requests and send back responses, follow these steps:
+The server processes requests as follows:
 
-1. **Start the Microservice Server:** Open a terminal window, navigate to the directory containing the microservice files, and start the server by executing:
-   ```bash
-   python server.py
-   ```
-2. **Process Requests:** As clients send requests specifying the desired operation (e.g., `generate_pairs` or `adjust_for_light`), the server will automatically process them based on the request type and send back the corresponding high-contrast color pairs.
+### Process Requests
+When a user clicks a button on the web interface (`index.html`), a request is sent to `/get_contrast_colors` with a specified mode (`light` or `dark`). The server processes this request and returns the appropriate color scheme.
 
-### Example call and Response:
-```python
-import zmq
+## Example Interaction
+Here's a simplified overview of how the interaction occurs:
 
-# Connect to the ZeroMQ socket
-context = zmq.Context()
-socket = context.socket(zmq.REQ)
-socket.connect("tcp://localhost:5578")
+1. **User clicks "Dark Mode"** on the webpage.
+2. **JavaScript makes an HTTP GET request** to the server with the query parameter `?mode=dark`.
+3. **Server processes the request**, determining the appropriate high-contrast colors.
+4. **Server sends a JSON response** with the colors `{ text_color: "#FFFFFF", background_color: "#000000" }`.
+5. **JavaScript updates the webpage's styles** to reflect the new color scheme.
 
-# Example request to the microservice for default high-contrast pairs
-socket.send_pyobj({"request": "generate_pairs"})
-response = socket.recv_pyobj()
-print("Response from microservice:", response)
-```
+## Next Steps
+- For further customization, users can modify `styles.css` to alter the appearance or add more functionality in `app.js` to handle additional interaction patterns.
+- Consider adding more features like user-defined color schemes or integration with real-time lighting data for ambient adjustments.
+
